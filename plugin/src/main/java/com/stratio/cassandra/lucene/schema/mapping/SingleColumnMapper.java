@@ -15,17 +15,19 @@
  */
 package com.stratio.cassandra.lucene.schema.mapping;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import com.stratio.cassandra.lucene.IndexException;
-import com.stratio.cassandra.lucene.schema.column.Column;
-import com.stratio.cassandra.lucene.schema.column.Columns;
+import com.stratio.cassandra.lucene.column.Column;
+import com.stratio.cassandra.lucene.column.Columns;
 import org.apache.cassandra.db.marshal.AbstractType;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 
 import javax.validation.constraints.NotNull;
+import java.nio.ByteBuffer;
 import java.util.Collections;
+import java.util.Optional;
 
 /**
  * Class for mapping between Cassandra's columns and Lucene documents.
@@ -59,15 +61,13 @@ public abstract class SingleColumnMapper<T extends Comparable<T>> extends Mapper
                               String analyzer,
                               Class<T> base,
                               AbstractType<?>... supportedTypes) {
-        super(field,
-              docValues,
+        super(field, docValues,
               validated,
               analyzer,
-              Collections.singletonList(column == null ? field : column),
-              supportedTypes);
+              Collections.singletonList(column == null ? field : column), supportedTypes);
 
         if (StringUtils.isWhitespace(column)) {
-            throw new IndexException("Column must not be whitespace, but found '%s'", column);
+            throw new IndexException("Column must not be whitespace, but found '{}'", column);
         }
 
         this.column = column == null ? field : column;
@@ -81,10 +81,7 @@ public abstract class SingleColumnMapper<T extends Comparable<T>> extends Mapper
     /** {@inheritDoc} */
     @Override
     public void addFields(Document document, Columns columns) {
-        Columns extractedColumns = columns.getColumnsByMapperName(column);
-        for (Column column : extractedColumns) {
-            addFields(document, column);
-        }
+        columns.getColumnsByMapperName(column).forEach(c -> addFields(document, c));
     }
 
     private <K> void addFields(Document document, Column<K> c) {
@@ -144,7 +141,7 @@ public abstract class SingleColumnMapper<T extends Comparable<T>> extends Mapper
 
     /** {@inheritDoc} */
     @Override
-    protected Objects.ToStringHelper toStringHelper(Object self) {
+    protected MoreObjects.ToStringHelper toStringHelper(Object self) {
         return super.toStringHelper(self).add("column", column);
     }
 
@@ -159,7 +156,7 @@ public abstract class SingleColumnMapper<T extends Comparable<T>> extends Mapper
      *
      * @param <T> the base type
      */
-    public static abstract class SingleFieldMapper<T extends Comparable<T>> extends SingleColumnMapper<T> {
+    public abstract static class SingleFieldMapper<T extends Comparable<T>> extends SingleColumnMapper<T> {
 
         /**
          * Builds a new {@link SingleFieldMapper} supporting the specified types for indexing and clustering.
@@ -185,19 +182,13 @@ public abstract class SingleColumnMapper<T extends Comparable<T>> extends Mapper
         /** {@inheritDoc} */
         @Override
         public void addIndexedFields(Document document, String name, T value) {
-            Field field = indexedField(name, value);
-            if (field != null) {
-                document.add(field);
-            }
+            indexedField(name, value).ifPresent(document::add);
         }
 
         /** {@inheritDoc} */
         @Override
         public void addSortedFields(Document document, String name, T value) {
-            Field field = sortedField(name, value);
-            if (field != null) {
-                document.add(field);
-            }
+            sortedField(name, value).ifPresent(document::add);
         }
 
         /**
@@ -207,7 +198,7 @@ public abstract class SingleColumnMapper<T extends Comparable<T>> extends Mapper
          * @param value the value of the column
          * @return the field to sort by the mapped column
          */
-        public abstract Field indexedField(String name, T value);
+        public abstract Optional<Field> indexedField(String name, T value);
 
         /**
          * Returns the {@link Field} to sort by the mapped column.
@@ -216,7 +207,7 @@ public abstract class SingleColumnMapper<T extends Comparable<T>> extends Mapper
          * @param value the value of the column
          * @return the field to sort by the mapped column
          */
-        public abstract Field sortedField(String name, T value);
+        public abstract Optional<Field> sortedField(String name, T value);
     }
 
 }
