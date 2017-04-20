@@ -15,7 +15,7 @@
  */
 package com.stratio.cassandra.lucene.schema.mapping;
 
-import com.stratio.cassandra.lucene.column.Column;
+import com.stratio.cassandra.lucene.schema.column.Column;
 import com.stratio.cassandra.lucene.util.DateParser;
 import org.apache.cassandra.db.marshal.*;
 import org.apache.lucene.document.Field;
@@ -26,7 +26,6 @@ import org.apache.lucene.search.SortField.Type;
 import org.apache.lucene.search.SortedNumericSortField;
 
 import java.util.Date;
-import java.util.Optional;
 
 /**
  * A {@link Mapper} to map a date field.
@@ -84,14 +83,14 @@ public class DateMapper extends SingleColumnMapper.SingleFieldMapper<Long> {
 
     /** {@inheritDoc} */
     @Override
-    public Optional<Field> indexedField(String name, Long value) {
-        return Optional.of(new LongField(name, value, STORE));
+    public Field indexedField(String name, Long value) {
+        return new LongField(name, value, STORE);
     }
 
     /** {@inheritDoc} */
     @Override
-    public Optional<Field> sortedField(String name, Long value) {
-        return Optional.of(new SortedNumericDocValuesField(name, value));
+    public Field sortedField(String name, Long value) {
+        return new SortedNumericDocValuesField(name, value);
     }
 
     /** {@inheritDoc} */

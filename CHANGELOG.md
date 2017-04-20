@@ -1,74 +1,71 @@
 # Changelog
 
-## 3.0.7.2 (upcoming)
+## 2.2.9.1 (April 20, 2017)
 
-* Add Lucene-specific CQL tracing
 * Fix parsing of data with CQL "date" type (#158)
 
-## 3.0.7.1 (17 June 2016)
+## 2.2.9.0 (April 03, 2017)
 
-Merged from 3.0.6:
+* Upgrade to Apache Cassandra 2.2.9
+
+## 2.2.8.0 (September 30, 2016)
+
+* Upgrade to Apache Cassandra 2.2.8
+
+Merged from 3.0.8.1:
+* Fix mapping of timestamp and date by the underlying numeric value (#177)
+
+## 2.2.7.1 (July 18, 2016)
+
+* Fix mapper referenced by alias in sortFields
+
+## 2.2.7.0 (July 07, 2016)
+
+* Upgrade to Apache Cassandra 2.2.7
+
+
+## 2.2.6.2 (July 05, 2016)
+
+* Fix parsing of data with CQL "date" type (#158)
+* Fix handling of immense term insertion mapping error
+
+## 2.2.6.1 (June 20, 2016)
+
+* Add Lucene-specific CQL tracing
 * Fix clustering query collisions in Lucene's query cache
+* Fix empty document insertion
 
-## 3.0.7.0 (17 June 2016)
+## 2.2.6.0 (May 30, 2016)
 
-* Upgrade to Apache Cassandra 3.0.7
-
-## 3.0.6.2 (06 June 2016)
- 
-* Fix deletion of columns with frozen type (UDT, tuples and frozen collections)
-
-## 3.0.6.1 (3 June 2016)
-
-* Add support for CQL paging over sorted searches
-* Add support for sorted searches using IN operator
-
-## 3.0.6.0 (27 May 2016)
-
-* Upgrade to Apache Cassandra 3.0.6
-* Add support for indexing columns with TTL 
-
-## 3.0.5.2 (22 May 2016)
-
+* Upgrade to Apache Cassandra 2.2.6
 * Add transformation for getting the bounding box of a geographical shape
-* Fix complex clustering keys building (#143)
 
-## 3.0.5.1 (19 May 2016)
+
+## 2.2.5.4 (May 24, 2016)
 
 * Upgrade to Apache Lucene 5.5.1
-* Add support for old dummy column syntax (Spark compatibility and score retrieval)
+* Add sorting merge policy (dramatically improves filter performance)
 * Add option to use doc values in match, contains and range searches
 * Add heuristic to build token range queries according to their selectivity
 * Add transformation for getting the convex hull of a geographical shape
-* Add early termination in inner pagination (improves allow filtering performance)
 * Remove indexed/sorted mapping options, all mappers store doc values when possible
+* Remove support for other partitioners than Murmur3
 * Fix invalid WKT shapes by zero-buffering them
 * Fix memory consumption issues with high fetch sizes
 * Fix clustering key filtering with better token prefix collation
 * Fix deletion of unique component of a collection (#132)
 
-## 3.0.5.0 (22 April 2016)
+## 2.2.5.3 (March 31, 2016)
 
-* Upgrade to Apache Cassandra 3.0.5
-
-## 3.0.4.1 (22 April 2016)
-
-* Add sorting merge policy (dramatically improves filter performance)
-* Add support for altering unmapped columns
-* Remove score docs cache, overtaken by sorting merge policy
-* Remove token range cache in favour of Lucene query cache
+* Add support for indexing time UUID columns with date, date_range and bitemporal mappers
 * Fix NPE while mapping geo points with explicitly null latitude/longitude value
-* Fix missed validation of sort fields
 
-## 3.0.4.0 (10 March 2016)
+Merged from 2.1.8.6:
+* Skip schema validation in already created indexes
 
-* Upgrade to Apache Cassandra 3.0.4
-* Add indexing of time UUID columns with date, date_range and bitemporal mappers
+## 2.2.5.2 (March 04, 2016)
 
-## 3.0.3.1 (4 March 2016)
-
-* Fix performance issues with ClusteringIndexNamesFilter
-Merged from 2.2.5:
+Merged from 2.2.4.4:
 * Add indexing of WKT geographical shapes (point, linestring, polygon and their multipart)
 * Add search by WKT geographical shapes (point, linestring, polygon and their multipart)
 * Add API for search-time transformation of WKT geographical shapes
@@ -79,52 +76,44 @@ Merged from 2.2.5:
 * Add transformation for getting the intersection between two geographical shapes
 * Add transformation for getting the union between two geographical shapes
 * Fix geo distance parsing of nautical miles
-
-## 3.0.3.0 (19 February 2016)
-
-* Upgrade to Apache Cassandra 3.0.3
-* Force disable paging for top-k searches
-* Add search cache (improves paging performance)
-* Add token range cache (improves search performance)
-* Remove support for other partitioners than Murmur3
 * Remove Sphinx documentation module
 
-## 2.2.5.1 (19 February 2016)
+## 2.2.5.1 (February 19, 2016)
 
-Merged from 2.2.4:
+Merged from 2.2.4.3:
 * Fixed explicit null values insertion (#94)
 
-## 2.2.5.0 (9 February 2016)
+## 2.2.5.0 (February 09, 2016)
 
 * Upgrade to Apache Cassandra 2.2.5
 
-## 2.2.4.2 (9 February 2016)
+## 2.2.4.2 (February 09, 2016)
 
 * Fixed missed bound statements paging handling (fixes top-k issues and improves MapReduce performance)
 
-## 2.2.4.1 (12 January 2016)
+## 2.2.4.1 (January 12, 2016)
 
 * Returns static columns (#70)
 * Fixed UDT bug (#85)
 * Sort by geographical distance
     
-## 2.2.4.0 (11 December 2015)
+## 2.2.4.0 (December 11, 2015)
 
 * Upgrade to Apache Cassandra 2.2.4
 * Add optional CQL-level write validation (CASSANDRA-10092)
 
-## 2.2.3.2 (9 December 2015)
+## 2.2.3.2 (December 09, 2015)
 
 * Add support for CQL DISTINCT operator (#69)
 
-## 2.2.3.1 (27 November 2015)
+## 2.2.3.1 (November 27, 2015)
 
 * Add support for CQL tuples
 * Add quoted field names to query builder
 * Fix mapping on columns with multiple mappers
 * Fix coordinator sorting to be based on mapper's base type
 
-## 2.2.3.0 (20 November 2015)
+## 2.2.3.0 (November 20, 2015)
 
 * Upgrade to Apache Cassandra 2.2.3
 * Add support for CQL UDFs (#43)
@@ -132,41 +121,41 @@ Merged from 2.2.4:
 * Improve collections support
 * Add support for new CQL types smallint, tinyint and date
 
-## 2.1.13.0 (10 February 2016)
+## 2.1.13.0 (February 10, 2016)
 
 * Upgrade to Apache Cassandra 2.1.13
  
-## 2.1.12.0 (11 January 2016)
+## 2.1.12.0 (January 11, 2016)
 
 * Upgrade to Apache Cassandra 2.1.12
  
-## 2.1.11.1 (18 November 2015)
+## 2.1.11.1 (November 18, 2015)
 
 * Fixed bitemporal bug (#46)
 * Fixed default directory path
 * Added query builder module (#50)
 * Add acceptance tests
 
-## 2.1.11.0 (27 October 2015)
+## 2.1.11.0 (October 27, 2015)
 
 * Upgrade to Apache Cassandra 2.1.11
 
-## 2.1.10.0 (27 October 2015)
+## 2.1.10.0 (October 27, 2015)
 
 * Upgrade to Apache Cassandra 2.1.10
 * Add ability to exclude data centers from indexing (#44)
 * Add support for predictions in bitemporal index (#46)
 * Add asynchronous indexing queue
 
-## 2.1.9.0 (9 September 2015)
+## 2.1.9.0 (September 09, 2015)
 
 * Upgrade to Apache Cassandra 2.1.9
 
-## 2.1.8.5 (9 September 2015)
+## 2.1.8.5 (September 09, 2015)
 
 * Remove problematic logback.xml
 
-## 2.1.8.4 (27 August 2015)
+## 2.1.8.4 (August 27, 2015)
 
 * Fix searches with both sorting and relevance
 * Improve wide rows data range filtering to increase performance
@@ -177,13 +166,13 @@ Merged from 2.2.4:
 * Allow the deletion of old unsupported indexes
 * Detect wrong sorting in date ranges (#36) 
 
-## 2.1.8.3 (20 August 2015)
+## 2.1.8.3 (August 20, 2015)
 
 * Fix analyzer selection in maps (#18)
 * Change logger fixed name from `stratio` to class-based `com.stratio`
 * Add performance tips section to documentation
 
-## 2.1.8.2 (13 August 2015)
+## 2.1.8.2 (August 13, 2015)
 
 * Add force index refresh option to searches
 * Add condition type `none` to return no rows
@@ -198,7 +187,7 @@ Merged from 2.2.4:
 * Best effort mapping, per mapper errors are just logged
 * Allow several mappers on the same column
 
-## 2.1.8.1 (31 July 2015)
+## 2.1.8.1 (July 31, 2015)
 
 * Add complete support for CQL paging, even for top-k queries.
 * Fix numeric collections (#12)
@@ -209,31 +198,31 @@ Merged from 2.2.4:
 * Set default sorted value to false
 * Upgrade to Lucene 5.2.1
 
-## 2.1.8.0 (10 July 2015)
+## 2.1.8.0 (July 10, 2015)
 
 * Upgrade to Apache Cassandra 2.1.8
 
-## 2.1.7.1 (10 July 2015)
+## 2.1.7.1 (July 10, 2015)
 
 * Add paging cache to remember Lucene cursors
 * Fix JavaDoc generation with Java 8
 * Homogenize JSON API
 
-## 2.1.7.0 (26 June 2015)
+## 2.1.7.0 (June 26, 2015)
 
 * Upgrade to Apache Cassandra 2.1.7
 
-## 2.1.6.2 (25 June 2015)
+## 2.1.6.2 (June 25, 2015)
 
 * Add date range features
 * Add basic geospatial features
 
-## 2.1.6.1 (17 June 2015)
+## 2.1.6.1 (June 17, 2015)
 
 * Fix row updated skipping first column (#6)
 * Avoid analysis at prefix, regexp, range and wildcard queries
 
-## 2.1.6.0 (8 June 2015)
+## 2.1.6.0 (June 08, 2015)
 
 * Become a plugin instead of a fork of Apache Cassandra
 * Upgrade to Apache Cassandra 2.1.6
@@ -241,34 +230,34 @@ Merged from 2.2.4:
 * Sorting through doc values
 * Add "indexed" and "sorted" options to mappers
 
-## 2.1.5.0 (30 April 2015)
+## 2.1.5.0 (April 30, 2015)
 
 * Upgrade to Apache Cassandra 2.1.5 (#28)
 * Removed clustering key mapper columns
 
-## 2.1.4.1 (21 April 2015)
+## 2.1.4.1 (April 21, 2015)
 
 * Improve top-k (CASSANDRA-8717)
 * Fix build.xml
 
-## 2.1.4.0 (7 April 2015)
+## 2.1.4.0 (April 07, 2015)
 
 * Upgrade to Apache Cassandra 2.1.4 (#16)
 * Fix reverse clustering order (#14)
 * Support for snowball and possibly other analyzers (#11)
 * Fix mapping in column-based clustering key mapper (#7)
 
-## 2.1.3.1 (12 March 2015)
+## 2.1.3.1 (March 12, 2015)
 
 * Fix mapping bug in column-based clustering key mapper
 * Upgrade to Lucene 4.10.4
 * Added case sensitive option to StringMapper
 
-## 2.1.3.0 (18 February 2015)
+## 2.1.3.0 (February 18, 2015)
 
 * Upgrade to Apache Cassandra 2.1.3
 
-## 2.1.2.2 (2 February 2015)
+## 2.1.2.2 (February 02, 2015)
 
 * Fix #7 (data inserted during update is not indexed)
 * Remove boolean query max clauses limit
@@ -277,11 +266,11 @@ Merged from 2.2.4:
 * Add basic support for multiple fields per mapper
 * Add collation for UUID mapper
 
-## 2.1.2.1 (15 December 2014)
+## 2.1.2.1 (December 15, 2014)
 
 * Improve logging time counting
 * Set synchronous indexing as default
 
-## 2.1.2.0 (5 December 2014)
+## 2.1.2.0 (December 05, 2014)
 
 * Upgrade to Apache Cassandra 2.1.2

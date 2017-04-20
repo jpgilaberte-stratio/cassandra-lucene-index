@@ -15,10 +15,10 @@
  */
 package com.stratio.cassandra.lucene.schema.mapping;
 
-import com.google.common.base.MoreObjects;
+import com.google.common.base.Objects;
 import com.stratio.cassandra.lucene.IndexException;
-import com.stratio.cassandra.lucene.column.Column;
-import com.stratio.cassandra.lucene.column.Columns;
+import com.stratio.cassandra.lucene.schema.column.Column;
+import com.stratio.cassandra.lucene.schema.column.Columns;
 import org.apache.cassandra.db.marshal.AbstractType;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.document.Document;
@@ -27,7 +27,6 @@ import org.apache.lucene.document.Field;
 import javax.validation.constraints.NotNull;
 import java.nio.ByteBuffer;
 import java.util.Collections;
-import java.util.Optional;
 
 /**
  * Class for mapping between Cassandra's columns and Lucene documents.
@@ -81,7 +80,10 @@ public abstract class SingleColumnMapper<T extends Comparable<T>> extends Mapper
     /** {@inheritDoc} */
     @Override
     public void addFields(Document document, Columns columns) {
-        columns.getColumnsByMapperName(column).forEach(c -> addFields(document, c));
+        for (Column col : columns.getColumnsByMapperName(column)){
+            addFields(document, col);
+        }
+        //columns.getColumnsByMapperName(column).forEach(c -> addFields(document, c));
     }
 
     private <K> void addFields(Document document, Column<K> c) {
@@ -141,7 +143,7 @@ public abstract class SingleColumnMapper<T extends Comparable<T>> extends Mapper
 
     /** {@inheritDoc} */
     @Override
-    protected MoreObjects.ToStringHelper toStringHelper(Object self) {
+    protected Objects.ToStringHelper toStringHelper(Object self) {
         return super.toStringHelper(self).add("column", column);
     }
 
@@ -182,13 +184,19 @@ public abstract class SingleColumnMapper<T extends Comparable<T>> extends Mapper
         /** {@inheritDoc} */
         @Override
         public void addIndexedFields(Document document, String name, T value) {
-            indexedField(name, value).ifPresent(document::add);
+            Field field = indexedField(name, value);
+            if (null != field){
+                document.add(field);
+            }
         }
 
         /** {@inheritDoc} */
         @Override
         public void addSortedFields(Document document, String name, T value) {
-            sortedField(name, value).ifPresent(document::add);
+            Field field = sortedField(name, value);
+            if (null != field){
+                document.add(field);
+            }
         }
 
         /**
@@ -198,7 +206,7 @@ public abstract class SingleColumnMapper<T extends Comparable<T>> extends Mapper
          * @param value the value of the column
          * @return the field to sort by the mapped column
          */
-        public abstract Optional<Field> indexedField(String name, T value);
+        public abstract Field indexedField(String name, T value);
 
         /**
          * Returns the {@link Field} to sort by the mapped column.
@@ -207,7 +215,7 @@ public abstract class SingleColumnMapper<T extends Comparable<T>> extends Mapper
          * @param value the value of the column
          * @return the field to sort by the mapped column
          */
-        public abstract Optional<Field> sortedField(String name, T value);
+        public abstract Field sortedField(String name, T value);
     }
 
 }
